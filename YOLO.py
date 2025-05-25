@@ -75,7 +75,6 @@ def image_cut(path:str):
 
 
     # Сохранение результата
-    cv2.imwrite('./output.png', get_cutted_class(0, [0], input_path=path))
-    result_image = cv2.imread('output.png')
-    #print(f"Изображение с маской {position}-го объекта класса {correct_class} сохранено как {output_path}")
-    return result_image
+    output_path = './output.png'
+    cv2.imwrite(output_path, get_cutted_class(0, [0], input_path=path))
+    return output_path

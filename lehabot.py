@@ -1,6 +1,8 @@
 # лехабот лоутаб
 import telebot
 from telebot import types
+import os
+import YOLO
 bot = telebot.TeleBot("7840655318:AAEYDbfYWDZQQj80bFbSKQBaSyYkeG2vhQ0")
 
 @bot.message_handler(commands=["start", "hub", "main", "nekit"])
@@ -20,8 +22,20 @@ def callback_message(callback):
     if callback.data == "delete":
         bot.delete_message(callback.message.chat.id, callback.message.reply_to_message.message_id)
     elif callback.data == "cut":
-        bot.edit_message_text("GAY GAy Gay gay ay y",callback.message.chat.id, callback.message.message_id)
-        file = open("./output.png", "rb")
-        bot.send_photo(callback.message.chat.id, file)
 
+        file_info = bot.get_file(callback.message.reply_to_message.photo[-1].file_id)
+        downloaded_file = bot.download_file(file_info.file_path) # скачиваем картинку
+
+        temp_path = f'temp_photo_{callback.message.chat.id}.jpg'
+        with open(temp_path, 'wb') as new_file:
+            new_file.write(downloaded_file)
+
+        result = YOLO.image_cut(temp_path)
+        
+        with open(result, 'rb') as photo:
+            bot.send_photo(callback.message.chat.id, photo)
+        
+        os.remove(temp_path)
+        os.remove(result)
+    
 bot.polling(none_stop=True)
