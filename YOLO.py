@@ -1,5 +1,5 @@
 from ultralytics import YOLO
-def image_cut(path:str):
+def image_cut(correct_class:int, position:list, path:str):
     path = path
     model = YOLO('yolov8l-seg.pt')
     results = model.predict(
@@ -76,5 +76,5 @@ def image_cut(path:str):
 
     # Сохранение результата
     output_path = './output.png'
-    cv2.imwrite(output_path, get_cutted_class(0, [0], input_path=path))
+    cv2.imwrite(output_path, get_cutted_class(correct_class, position, input_path=path))
     return output_path
